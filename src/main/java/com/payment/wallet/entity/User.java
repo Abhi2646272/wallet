@@ -4,6 +4,7 @@ import com.payment.wallet.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,8 +14,10 @@ public class User {
     private String id;
     private String name;
     @Email
+    @UniqueElements
     private String email;
     @Pattern(regexp = "\\d{10}")
+    @UniqueElements
     private String phoneNumber;
     private String walletId;
     private double balance = 0.0;

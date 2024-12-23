@@ -1,16 +1,17 @@
 package com.payment.wallet.controller;
 
+import com.payment.wallet.dto.*;
 import com.payment.wallet.entity.Transaction;
 import com.payment.wallet.entity.User;
 import com.payment.wallet.service.TransactionService;
 import com.payment.wallet.service.UserService;
-import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -21,38 +22,36 @@ public class UserController {
     @Autowired
     private TransactionService transactionService;
 
-    // DTO need to create for request and response
-
-
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
-        return ResponseEntity.ok(userService.registerUser(user));
+    public ResponseEntity<User> registerUser(@RequestBody @Valid UserRegisterDTO userDTO) {
+
+        return ResponseEntity.ok(userService.registerUser(userDTO));
     }
 
     @PostMapping("/wallet/add-money")
-    public ResponseEntity<Double> addMoney(@RequestBody Map<String, Object> payload) {
-        String walletId = payload.get("wallet_id").toString();
-        double amount = Double.parseDouble(payload.get("amount").toString());
-        return ResponseEntity.ok(userService.addMoney(walletId, amount));
+    public ResponseEntity<Double> addMoney(@RequestBody @Valid AddMoneyRequestDTO payload) {
+        return ResponseEntity.ok(userService.addMoney(payload.getWalletId(), payload.getAmount()));
     }
 
-    @GetMapping("/{wallet_id}/balance")
-    public ResponseEntity<Double> getWalletBalance(@PathVariable String wallet_id) {
-        return ResponseEntity.ok(userService.checkBalance(wallet_id));
+    @GetMapping("/{walletId}/balance")
+    public ResponseEntity<Double> getWalletBalance(@PathVariable String walletId) {
+        return ResponseEntity.ok(userService.checkBalance(walletId));
     }
 
-    @GetMapping("/wallet/{wallet_id}/transactions")
-    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String wallet_id) {
-        return ResponseEntity.ok(userService.getTransactionHistory(wallet_id));
+    @GetMapping("/wallet/{walletId}/transactions")
+    public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String walletId) {
+        return ResponseEntity.ok(userService.getTransactionHistory(walletId));
     }
 
     @PostMapping("/wallet/transfer")
-    public ResponseEntity<String> transferMoney(@RequestBody Map<String, Object> payload) {
-        String senderWalletId = payload.get("sender_wallet_id").toString();
-        String receiverWalletId = payload.get("receiver_wallet_id").toString();
-        double amount = Double.parseDouble(payload.get("amount").toString());
-        transactionService.transferMoney(senderWalletId, receiverWalletId, amount);
+    public ResponseEntity<String> transferMoney(@RequestBody @Valid TransferRequestDTO transferRequest) {
+        transactionService.transferMoney(
+                transferRequest.getSenderWalletId(),
+                transferRequest.getReceiverWalletId(),
+                transferRequest.getAmount()
+        );
         return ResponseEntity.ok("Transfer successful");
     }
 }
+
 

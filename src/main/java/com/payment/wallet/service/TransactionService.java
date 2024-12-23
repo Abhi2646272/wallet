@@ -19,6 +19,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+
     @Transactional
     public String transferMoney(String senderWalletId, String receiverWalletId, double amount) {
         // Check if both sender and receiver wallets exist
