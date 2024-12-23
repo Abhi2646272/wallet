@@ -2,8 +2,7 @@ package com.payment.wallet.controller;
 
 import com.payment.wallet.dto.*;
 import com.payment.wallet.entity.Transaction;
-import com.payment.wallet.entity.User;
-import com.payment.wallet.service.TransactionService;
+import com.payment.wallet.service.WalletService;
 import com.payment.wallet.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +13,18 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class UserController {
+@RequestMapping("/api/wallet")
+public class WalletController {
     @Autowired
     private UserService userService;
 
     @Autowired
-    private TransactionService transactionService;
+    private WalletService walletService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody @Valid UserRegisterDTO userDTO) {
 
-        return ResponseEntity.ok(userService.registerUser(userDTO));
-    }
 
     @PostMapping("/wallet/add-money")
-    public ResponseEntity<Double> addMoney(@RequestBody @Valid AddMoneyRequestDTO payload) {
+    public ResponseEntity<Double> addMoney(@RequestBody @Valid  AddMoneyRequestDTO payload) {
         return ResponseEntity.ok(userService.addMoney(payload.getWalletId(), payload.getAmount()));
     }
 
@@ -38,14 +33,14 @@ public class UserController {
         return ResponseEntity.ok(userService.checkBalance(walletId));
     }
 
-    @GetMapping("/wallet/{walletId}/transactions")
+    @GetMapping("/{walletId}/transactions")
     public ResponseEntity<List<Transaction>> getTransactionHistory(@PathVariable String walletId) {
         return ResponseEntity.ok(userService.getTransactionHistory(walletId));
     }
 
-    @PostMapping("/wallet/transfer")
+    @PostMapping("/transfer")
     public ResponseEntity<String> transferMoney(@RequestBody @Valid TransferRequestDTO transferRequest) {
-        transactionService.transferMoney(
+        walletService.transferMoney(
                 transferRequest.getSenderWalletId(),
                 transferRequest.getReceiverWalletId(),
                 transferRequest.getAmount()

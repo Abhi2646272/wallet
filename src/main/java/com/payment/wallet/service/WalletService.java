@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-public class TransactionService {
+public class WalletService {
 
     @Autowired
     private UserRepository userRepository;

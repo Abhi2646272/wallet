@@ -1,9 +1,10 @@
 package com.payment.wallet.entity;
 
 import com.payment.wallet.enums.Role;
+
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
