@@ -17,12 +17,11 @@ public class User {
     @Email
     @UniqueElements
     private String email;
-    @Pattern(regexp = "\\d{10}")
     @UniqueElements
     private String phoneNumber;
     private String walletId;
     private double balance = 0.0;
-    private Role role; // USER or ADMIN
+    private String role; // USER or ADMIN
     private String password; // Encrypted
 
     public double getBalance() {
@@ -73,11 +72,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

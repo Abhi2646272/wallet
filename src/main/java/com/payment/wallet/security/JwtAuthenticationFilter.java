@@ -1,6 +1,7 @@
 package com.payment.wallet.security;
 
 import com.payment.wallet.entity.User;
+import com.payment.wallet.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,9 +16,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
+
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -27,16 +32,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
+        logger.info("JWT Token header: " + authHeader);
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
-            String username = jwtUtils.extractUsername(jwt);
-            String role = jwtUtils.extractRole(jwt); // Extract role from the token
+            logger.info("JWT Token header: " + jwt);
 
+            String username = jwtUtils.extractUsername(jwt);
+            logger.info("Extracted role from username: " + username);
+
+            String role = jwtUtils.extractRole(jwt); // Extract role from the token
+            logger.info("Extracted role from token: " + role);
+//            if (role != null && !role.startsWith("ROLE_")) {
+//                role = "ROLE_" + role;  // Ensure role is prefixed with ROLE_
+//            }
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 
                 if (jwtUtils.isTokenValid(jwt, username)) {
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+//                    logger.info("Extracted role from token: " + authority);
 
                     // Using the builder pattern for UserDetails
                     UserDetails userDetails  =
@@ -48,6 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(userDetails, null, Collections.emptyList());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    logger.info("SecurityContext set with authentication for user: " + username);
+
                 }
             }
         }

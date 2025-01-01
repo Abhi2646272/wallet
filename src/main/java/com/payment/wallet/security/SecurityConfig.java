@@ -1,5 +1,6 @@
 package com.payment.wallet.security;
 
+import com.payment.wallet.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,8 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.logging.Logger;
+
 @Configuration
 public class SecurityConfig {
+    private static final Logger logger = Logger.getLogger(SecurityConfig.class.getName());
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -23,16 +27,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Configuring Security Filter Chain");
+
         http
                 .csrf((csrf) -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/register", "/api/login","/v3/**","/swagger-ui/**").permitAll() // Public endpoints
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin endpoints
-                        .requestMatchers("/api/wallet/**").hasRole("USER") // User endpoints
+                        .requestMatchers("/api/**","/api/register", "/api/login","/v3/**","/swagger-ui/**").permitAll() // Public endpoints
+//                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin endpoints
+//                        .requestMatchers("/api/wallet/**").hasRole("USER") // User endpoints
                         .anyRequest().authenticated() // All other endpoints require authentication
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
-
+        logger.info("Security Filter Chain configured successfully");
         return http.build();
     }
 

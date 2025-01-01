@@ -3,6 +3,7 @@ package com.payment.wallet.service;
 import com.payment.wallet.dto.UserRegisterDTO;
 import com.payment.wallet.entity.Transaction;
 import com.payment.wallet.entity.User;
+import com.payment.wallet.enums.Role;
 import com.payment.wallet.repo.TransactionRepository;
 import com.payment.wallet.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class UserService {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPhoneNumber(userDTO.getPhoneNumber());
+
         user.setRole(userDTO.getRole());
 
         user.setWalletId(UUID.randomUUID().toString());
