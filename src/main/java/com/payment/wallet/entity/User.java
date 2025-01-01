@@ -19,6 +19,7 @@ public class User {
     private String email;
     @UniqueElements
     private String phoneNumber;
+    @UniqueElements
     private String walletId;
     private double balance = 0.0;
     private String role; // USER or ADMIN

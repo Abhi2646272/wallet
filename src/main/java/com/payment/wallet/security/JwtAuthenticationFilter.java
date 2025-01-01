@@ -43,15 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String role = jwtUtils.extractRole(jwt); // Extract role from the token
             logger.info("Extracted role from token: " + role);
-//            if (role != null && !role.startsWith("ROLE_")) {
-//                role = "ROLE_" + role;  // Ensure role is prefixed with ROLE_
-//            }
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 
                 if (jwtUtils.isTokenValid(jwt, username)) {
                     SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
-//                    logger.info("Extracted role from token: " + authority);
 
                     // Using the builder pattern for UserDetails
                     UserDetails userDetails  =

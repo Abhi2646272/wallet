@@ -64,7 +64,6 @@ public class UserService {
     public Double checkBalance(String walletId) {
         User user = userRepository.findByWalletId(walletId)
                 .orElseThrow(() -> new RuntimeException("Wallet not found"));
-
         return user.getBalance();
     }
 }
