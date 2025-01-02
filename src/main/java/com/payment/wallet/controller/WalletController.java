@@ -28,7 +28,7 @@ public class WalletController {
 
     @PostMapping("/add-money")
     public ResponseEntity<Double> addMoney(@RequestBody @Valid  AddMoneyRequestDTO payload) {
-        return ResponseEntity.ok(userService.addMoney(payload.getWalletId(), payload.getAmount()));
+        return ResponseEntity.ok(userService.addMoney(payload.getWalletId(), payload.getAmount(), payload.getDescription()));
     }
 
     @GetMapping("/{walletId}/balance")
@@ -56,7 +56,8 @@ public class WalletController {
         walletService.transferMoney(
                 transferRequest.getSenderWalletId(),
                 transferRequest.getReceiverWalletId(),
-                transferRequest.getAmount()
+                transferRequest.getAmount(),
+                transferRequest.getDescription()
         );
         return ResponseEntity.ok("Transfer successful");
     }

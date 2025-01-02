@@ -12,7 +12,17 @@ public class AddMoneyRequestDTO {
     @Positive(message = "Amount must be positive")
     private double amount;
 
+    private String description;
+
     // Getters and Setters
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Positive(message = "Amount must be positive")
     public double getAmount() {

@@ -40,7 +40,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public double addMoney(String walletId, double amount) {
+    public double addMoney(String walletId, double amount, String remark) {
         User user = userRepository.findByWalletId(walletId)
             .orElseThrow(() -> new RuntimeException("Wallet not found"));
         user.setBalance(user.getBalance() + amount);
@@ -49,6 +49,7 @@ public class UserService {
         transaction.setWalletId(walletId);
         transaction.setTransactionType("Add Money");
         transaction.setAmount(amount);
+        transaction.setDescription(remark);
 
         transactionRepository.save(transaction);
         userRepository.save(user);

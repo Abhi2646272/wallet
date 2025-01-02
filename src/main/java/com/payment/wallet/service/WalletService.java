@@ -21,7 +21,7 @@ public class WalletService {
 
 
     @Transactional
-    public String transferMoney(String senderWalletId, String receiverWalletId, double amount) {
+    public String transferMoney(String senderWalletId, String receiverWalletId, double amount, String remark) {
         // Check if both sender and receiver wallets exist
         User sender = userRepository.findByWalletId(senderWalletId)
                 .orElseThrow(() -> new RuntimeException("Sender wallet not found"));
@@ -36,9 +36,9 @@ public class WalletService {
         // Create sender's transaction
         Transaction senderTransaction = new Transaction();
         senderTransaction.setWalletId(senderWalletId);
-        senderTransaction.setTransactionType("Transfer");
+        senderTransaction.setTransactionType("Transfer (Dr.)");
         senderTransaction.setAmount(-amount); // Deduct from sender
-
+        senderTransaction.setDescription(remark);
         senderTransaction.setStatus("Pending");
         senderTransaction.setTimestamp(LocalDateTime.now());
         senderTransaction.setDescription("Transfer to " + receiverWalletId);
@@ -46,7 +46,7 @@ public class WalletService {
         // Create receiver's transaction
         Transaction receiverTransaction = new Transaction();
         receiverTransaction.setWalletId(receiverWalletId);
-        receiverTransaction.setTransactionType("Transfer");
+        receiverTransaction.setTransactionType("Transfer (Cr.)");
         receiverTransaction.setAmount(amount); // Add to receiver
         receiverTransaction.setStatus("Pending");
         receiverTransaction.setTimestamp(LocalDateTime.now());

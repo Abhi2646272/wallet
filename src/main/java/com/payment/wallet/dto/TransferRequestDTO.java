@@ -15,6 +15,9 @@ public class TransferRequestDTO {
     @Positive(message = "Amount must be positive")
     private double amount;
 
+
+    private String description;
+
     // Getters and Setters
 
     @Positive(message = "Amount must be positive")
@@ -40,5 +43,13 @@ public class TransferRequestDTO {
 
     public void setSenderWalletId(@NotBlank(message = "Sender wallet ID is required") String senderWalletId) {
         this.senderWalletId = senderWalletId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

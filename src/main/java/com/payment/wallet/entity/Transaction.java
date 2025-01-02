@@ -1,6 +1,5 @@
 package com.payment.wallet.entity;
 
-import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
