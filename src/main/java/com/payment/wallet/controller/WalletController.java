@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/wallet")
+@RequestMapping("/api/v1/wallet")
 public class WalletController {
     @Autowired
     private UserService userService;

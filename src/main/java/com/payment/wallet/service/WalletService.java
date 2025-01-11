@@ -19,6 +19,9 @@ public class WalletService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private TransactionService transactionService;
+
 
     @Transactional
     public String transferMoney(String senderWalletId, String receiverWalletId, double amount, String remark) {
@@ -32,25 +35,31 @@ public class WalletService {
         if (sender.getBalance() < amount) {
             return "Insufficient funds in sender's wallet";
         }
-
+        String txnId = transactionService.generateTxnId("WLT");
         // Create sender's transaction
         Transaction senderTransaction = new Transaction();
+        senderTransaction.setTransactionId(txnId);
+        senderTransaction.setSenderWalletId(sender.getName());
+        senderTransaction.setReceiverWalletId(receiver.getName());
         senderTransaction.setWalletId(senderWalletId);
         senderTransaction.setTransactionType("Transfer (Dr.)");
-        senderTransaction.setAmount(-amount); // Deduct from sender
+        senderTransaction.setAmount(amount); // Deduct from sender
         senderTransaction.setDescription(remark);
         senderTransaction.setStatus("Pending");
         senderTransaction.setTimestamp(LocalDateTime.now());
-        senderTransaction.setDescription("Transfer to " + receiverWalletId);
+        senderTransaction.setDescription("Transfer to " + receiver.getName());
 
         // Create receiver's transaction
         Transaction receiverTransaction = new Transaction();
+        receiverTransaction.setTransactionId(txnId);
         receiverTransaction.setWalletId(receiverWalletId);
+        receiverTransaction.setReceiverWalletId(receiver.getName());
+        receiverTransaction.setSenderWalletId(sender.getName());
         receiverTransaction.setTransactionType("Transfer (Cr.)");
         receiverTransaction.setAmount(amount); // Add to receiver
         receiverTransaction.setStatus("Pending");
         receiverTransaction.setTimestamp(LocalDateTime.now());
-        receiverTransaction.setDescription("Transfer from " + senderWalletId);
+        receiverTransaction.setDescription("Transfer from " + sender.getName());
 
         try {
             // Update the balances
@@ -66,8 +75,8 @@ public class WalletService {
             userRepository.save(receiver);
 
             // Update the transaction status to successful
-            senderTransaction.setStatus("Successful");
-            receiverTransaction.setStatus("Successful");
+            senderTransaction.setStatus("SUCCESS");
+            receiverTransaction.setStatus("SUCCESS");
 
 
             // Save the updated transactions

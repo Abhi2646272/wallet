@@ -15,6 +15,8 @@ public class Transaction {
     private String id = UUID.randomUUID().toString();// Unique transaction ID
     private String walletId; // The wallet ID associated with the transaction (Sender's wallet)
     private String transactionType;
+    private String transactionId;
+    private String utr;
     private double amount;
     private String senderWalletId;
     private String receiverWalletId;
@@ -129,6 +131,22 @@ public class Transaction {
 
     public void setWalletId(String walletId) {
         this.walletId = walletId;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getUtr() {
+        return utr;
+    }
+
+    public void setUtr(String utr) {
+        this.utr = utr;
     }
 }
 

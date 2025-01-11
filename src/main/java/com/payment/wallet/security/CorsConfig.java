@@ -1,11 +1,16 @@
 package com.payment.wallet.security;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.io.IOException;
 @Configuration
 public class CorsConfig {
 
@@ -21,4 +26,5 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", config); // Apply CORS settings to all endpoints
         return new CorsFilter(source);
     }
-}
+
+ }

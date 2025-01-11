@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
+    long count();
     Optional<User> findByEmail(String email);
     Optional<User> findByWalletId(String walletId);
 }

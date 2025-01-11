@@ -23,7 +23,7 @@ public class JwtUtils {
                     .setSubject(username)
                     .claim("role", role)
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+//                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                     .signWith(SignatureAlgorithm.HS256, SECRET)
                     .compact();
              logger.info("token------ "+token);
@@ -61,7 +61,7 @@ public class JwtUtils {
     }
 
     public boolean isTokenValid(String token, String username) {
-        return extractUsername(token).equals(username) && !isTokenExpired(token);
+        return extractUsername(token).equals(username);
     }
 
     private boolean isTokenExpired(String token) {
